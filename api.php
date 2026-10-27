@@ -29,7 +29,7 @@ case 'list':
  $s->execute([':m'=>$m,':m2'=>$m,':q'=>$q,':q2'=>$q]);out($s->fetchAll());
 case 'save':
  $t=trim($in['titulo']??'');$d=trim($in['descripcion']??'');$m=$in['modulo']??'';
- if(!$t||!$d||!in_array($m,$mods)||mb_strlen($t)>80)out(['error'=>'Completa módulo, título (máx. 80) y descripción'],422);
+ if(!$t||!$d||!in_array($m,$mods)||(function_exists('mb_strlen')?mb_strlen($t):strlen($t))>80)out(['error'=>'Completa módulo, título (máx. 80) y descripción'],422);
  if(!empty($in['id']))$db->prepare('UPDATE conceptos SET modulo=?,titulo=?,descripcion=? WHERE id=?')->execute([$m,$t,$d,(int)$in['id']]);
  else $db->prepare('INSERT INTO conceptos(modulo,titulo,descripcion) VALUES(?,?,?)')->execute([$m,$t,$d]);
  out(['ok'=>1]);
