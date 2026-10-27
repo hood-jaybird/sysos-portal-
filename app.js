@@ -53,8 +53,8 @@ if(b.dataset.a=='fav'){await post('fav',{id});load()}
 if(b.dataset.a=='del'&&confirm('¿Eliminar "'+c.titulo+'"?')){await post('del',{id});toast('Concepto eliminado');load()}
 if(b.dataset.a=='ed'){$('#id').value=id;$('#mod').value=c.modulo;$('#tit').value=c.titulo;$('#des').value=c.descripcion;$('#fT').textContent='Editando concepto';$('#f').scrollIntoView({behavior:'smooth',block:'center'})}};
 const reset=()=>{$('#f').reset();$('#id').value='';$('#fT').textContent='Nuevo concepto'};$('#cancel').onclick=reset;
-$('#f').onsubmit=async e=>{e.preventDefault();const r=await post('save',{id:$('#id').value,modulo:$('#mod').value,titulo:$('#tit').value,descripcion:$('#des').value});
-if(r.error)return toast(r.error);toast('Concepto guardado');reset();load()};
+$('#f').onsubmit=async e=>{e.preventDefault();try{const r=await post('save',{id:$('#id').value,modulo:$('#mod').value,titulo:$('#tit').value,descripcion:$('#des').value});
+if(r.error)return toast(r.error);toast('Concepto guardado');reset();load()}catch(x){toast('Error del servidor: revisa error.log de Apache')}};
 load();
 
 /* Round Robin animado */
