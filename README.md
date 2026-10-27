@@ -140,18 +140,10 @@ systemctl show apache2 -p ProcSubset -p ProtectProc
 sudo systemctl status apache2 --no-pager
 ```
 
-```
-PEGAR LOG
-```
-
 **Sintaxis correcta**
 
 ```bash
 sudo apache2ctl configtest
-```
-
-```
-PEGAR LOG   (debe decir: Syntax OK)
 ```
 
 **Sitio activo y dominio virtual**
@@ -161,28 +153,16 @@ ls /etc/apache2/sites-enabled/
 curl -I http://sysos.local
 ```
 
-```
-PEGAR LOG   (debe mostrar HTTP/1.1 200 OK)
-```
-
 **Permisos**
 
 ```bash
 ls -l /var/www/sysos\\\_portal
 ```
 
-```
-PEGAR LOG   (www-data www-data, -rw-r--r--)
-```
-
 **Firewall**
 
 ```bash
 sudo ufw status
-```
-
-```
-PEGAR LOG
 ```
 
 **Directorios sin indexado** (crea una carpeta vacía y ábrela en el navegador)
@@ -193,18 +173,10 @@ curl -I http://sysos.local/prueba/
 sudo rmdir /var/www/sysos\\\_portal/prueba
 ```
 
-```
-PEGAR LOG   (debe mostrar 403 Forbidden)
-```
-
 **Dashboard (API de métricas)**
 
 ```bash
 curl -s http://sysos.local/api.php?a=metrics | head -c 400
-```
-
-```
-PEGAR LOG
 ```
 
 **MariaDB**
@@ -213,17 +185,20 @@ PEGAR LOG
 sudo mysql sysos -e "SELECT id,modulo,titulo FROM conceptos;"
 ```
 
-```
-PEGAR LOG
-```
+## 6. Capturas
 
-## 6\. Capturas
+### Portal
+![Portal](capturas/capturas_portal.png)
 
-* `capturas\_portal.png` – inicio
-* `capturas\_dashboard.png` – dashboard con métricas reales
-* `capturas\_crud-crear.png`, `crud-editar.png`, `crud-eliminar.png` – CRUD
+### Dashboard
+![Dashboard](capturas/capturas_dashboard.png)
 
-## 7\. Problemas encontrados y soluciones
+### CRUD
+![Crear](capturas/capturas_crud-crear.png)
+![Editar](capturas/crud-editar.png)
+![Eliminar](capturas/crud-eliminar.png)
+
+## 7. Problemas encontrados y soluciones
 
 |Problema|Causa|Solución|
 |-|-|-|
