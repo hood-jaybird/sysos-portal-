@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SysOS · KernelTech Solutions</title><link rel="stylesheet" href="style.css"></head><body>
+<nav><b>⚙ SysOS</b><div id="menu"><a href="#inicio">Inicio</a><a href="#procesos">Procesos</a><a href="#memoria">Memoria</a><a href="#archivos">Archivos</a><a href="#virt">Virtualización</a><a href="#dash">Dashboard</a><a href="#crud">Glosario</a></div><span class="user">● KernelTech</span></nav>
+
+<header id="inicio" class="panel hero"><i class="blob"></i><i class="blob b2"></i>
+<span class="tag">KernelTech Solutions · portal interno</span>
+<h1 data-t="SysOS">SysOS</h1>
+<p class="lead">Aprende cómo funciona un sistema operativo y vigila el servidor que te está sirviendo esta página: <span id="type"></span></p>
+<a class="btn" href="#dash">Ver servidor en vivo</a> <a class="btn" href="#procesos">Empezar a aprender</a>
+<div class="stats"><div><b id="hUp">--</b><span>encendido</span></div><div><b id="hLoad">--</b><span>carga CPU (1 min)</span></div><div><b id="hRam">--</b><span>RAM usada</span></div></div></header>
+
+<section class="panel rv"><h2><span>⏳</span>Historia de los sistemas operativos</h2>
+<div class="tl">
+<div><h4><i>1</i>Años 1950</h4>Procesamiento por lotes: un operador cargaba tarjetas perforadas y la máquina ejecutaba un trabajo a la vez.</div>
+<div><h4><i>2</i>Años 1960</h4>Multiprogramación y tiempo compartido: varios programas comparten la CPU. Nace la idea de proceso.</div>
+<div><h4><i>3</i>1969</h4>Unix en Bell Labs: todo es un archivo, programas pequeños que se combinan, escrito en C.</div>
+<div><h4><i>4</i>1991</h4>Linus Torvalds publica el kernel Linux. Con GNU forma el sistema que hoy corre Ubuntu Server.</div>
+<div><h4><i>5</i>Años 2000</h4>Virtualización masiva (Xen, KVM) y nube: un servidor físico aloja muchas máquinas.</div>
+<div><h4><i>6</i>Hoy</h4>Contenedores, Kubernetes y namespaces: aislamiento ligero a nivel de kernel.</div></div></section>
+
+<section id="procesos" class="panel rv"><h2><span>⚡</span>Procesos y concurrencia</h2>
+<div class="grid"><div class="card"><h3>Estados de un proceso</h3><div class="pills" id="st"></div><p id="stInfo"></p></div>
+<div class="card"><h3>Simulación: Productor–Consumidor</h3><div class="buf" id="buf"></div><button id="prod">Producir</button> <button id="cons">Consumir</button><p id="pcMsg">Buffer de 5 espacios compartido por dos hilos.</p></div></div>
+<div class="grid" style="margin-top:18px"><div class="card"><h3>Round Robin animado</h3>
+<label>Ráfagas de CPU (P1, P2, ...)<input id="rrB" value="5 3 8 2"></label><label>Quantum<input id="rrQ" type="number" min="1" max="6" value="2"></label>
+<button id="rrGo">Simular</button><div class="cpu" id="rrC">CPU libre</div><div class="qs">Cola: <span id="rrQ2">—</span></div><div class="gantt" id="rrG"></div><p id="rrO"></p></div>
+<div class="card"><h3>Filósofos comensales</h3><div id="tbl"></div><button id="dpMode">Provocar deadlock</button> <button id="dpReset">Reiniciar</button><p id="dpMsg"></p></div></div>
+<ul class="defs"><li><b>Hilos POSIX:</b> flujos de ejecución dentro de un proceso que comparten memoria (pthread_create).</li><li><b>Round Robin:</b> cada proceso usa la CPU un quantum y vuelve al final de la cola.</li><li><b>SJF:</b> se ejecuta primero el trabajo más corto; minimiza el tiempo de espera promedio.</li><li><b>Prioridades:</b> gana el proceso más urgente; riesgo de inanición, se mitiga con aging.</li><li><b>Semáforo:</b> contador con wait()/signal() que controla acceso a recursos.</li><li><b>Mutex:</b> cerrojo binario; solo un hilo entra a la sección crítica.</li><li><b>Condición de carrera:</b> el resultado depende del orden de acceso a datos compartidos.</li></ul></section>
+
+<section id="memoria" class="panel rv"><h2><span>🧠</span>Gestión de memoria virtual</h2>
+<div class="grid"><div class="card"><h3>Dirección lógica → física</h3>
+<small>Tabla de páginas: pág 0→marco 5 · 1→2 · 2→7 · 3→1</small>
+<label>Tamaño de página (bytes)<select id="ps"><option>256</option><option selected>1024</option><option>4096</option></select></label>
+<label>Dirección lógica<input id="la" type="number" min="0" value="2500"></label><p id="mmuOut"></p></div>
+<div class="card"><h3>Reemplazo de páginas</h3><label>Cadena de referencias<input id="refs" value="7 0 1 2 0 3 0 4 2 3 0 3 2"></label><label>Marcos<input id="fr" type="number" min="1" max="8" value="3"></label><div id="repOut"></div></div></div>
+<ul class="defs"><li><b>Paginación:</b> memoria dividida en bloques fijos (páginas/marcos); sin fragmentación externa.</li><li><b>Segmentación:</b> divide por unidades lógicas (código, pila, datos) de tamaño variable.</li><li><b>Page Fault:</b> 1) la CPU pide una página ausente, 2) el SO la busca en disco, 3) elige marco víctima, 4) actualiza la tabla y reintenta.</li><li><b>Fragmentación interna:</b> sobra espacio dentro de la última página. <b>Externa:</b> huecos libres dispersos.</li><li><b>FIFO / LRU / Óptimo:</b> reemplaza la más antigua / la menos usada recientemente / la que se usará más tarde.</li></ul></section>
+
+<section id="archivos" class="panel rv"><h2><span>📁</span>Sistemas de archivos y E/S</h2>
+<div class="grid"><div class="card"><h3>Jerarquía de Linux</h3><div class="pills" id="tree"></div><p id="treeInfo">Elige un directorio.</p></div>
+<div class="card"><h3>Cómo se guarda un archivo</h3><p>El <b>VFS</b> da una interfaz común (open, read, write) sin importar si el disco es ext4, NTFS o /proc. En <b>ext4</b> cada archivo tiene un <b>inodo</b> con permisos, dueño, tamaño y punteros a bloques; el nombre vive en el directorio. Los bloques se asignan en <i>extents</i> (rangos contiguos).</p></div></div>
+<ul class="defs"><li><b>Interrupción:</b> señal del hardware que pausa la CPU para atender un dispositivo.</li><li><b>DMA:</b> el controlador copia datos a RAM sin ocupar la CPU y avisa al terminar.</li></ul></section>
+
+<section id="virt" class="panel rv"><h2><span>📦</span>Virtualización y contenedores</h2>
+<div class="card"><h3>KVM (máquina virtual) vs Docker (contenedor)</h3><small>Valores típicos de referencia</small>
+<div>Arranque: VM ~30 s<div class="bar"><i style="--w:100%;background:var(--o)"></i></div>Contenedor ~1 s<div class="bar"><i style="--w:4%;background:var(--a)"></i></div></div>
+<div>RAM base: VM ~1024 MB<div class="bar"><i style="--w:100%;background:var(--o)"></i></div>Contenedor ~50 MB<div class="bar"><i style="--w:5%;background:var(--a)"></i></div></div>
+<div>Disco: VM ~10 GB<div class="bar"><i style="--w:100%;background:var(--o)"></i></div>Contenedor ~200 MB<div class="bar"><i style="--w:2%;background:var(--a)"></i></div></div></div>
+<ul class="defs"><li><b>Hipervisor Tipo 1:</b> corre directo sobre el hardware (KVM, ESXi, Xen).</li><li><b>Hipervisor Tipo 2:</b> corre sobre un SO anfitrión (VirtualBox, VMware Workstation).</li><li><b>Namespaces:</b> dan a cada contenedor su propia vista de PIDs, red y montajes.</li><li><b>CGroups:</b> limitan CPU, RAM y E/S por grupo. Un contenedor comparte kernel; una VM trae el suyo.</li></ul></section>
+
+<section id="dash" class="panel rv"><h2><span>📡</span>Dashboard del servidor <small style="font-size:.9rem;font-weight:400"><i class="dot" id="live"></i><span id="upTxt"></span></small></h2>
+<div class="rings">
+<div class="ring" id="rCpu"><svg viewBox="0 0 120 120"><circle class="t" cx="60" cy="60" r="50"/><circle class="r" cx="60" cy="60" r="50" stroke="#8b5cf6"/></svg><b>--</b>CPU<small id="cpuTxt">uptime</small></div>
+<div class="ring" id="rRam"><svg viewBox="0 0 120 120"><circle class="t" cx="60" cy="60" r="50"/><circle class="r" cx="60" cy="60" r="50" stroke="#fb923c"/></svg><b>--</b>RAM<small id="ramTxt">free -m</small></div>
+<div class="ring" id="rDsk"><svg viewBox="0 0 120 120"><circle class="t" cx="60" cy="60" r="50"/><circle class="r" cx="60" cy="60" r="50" stroke="#22d3ee"/></svg><b>--</b>Disco<small id="dskTxt">df -h /</small></div></div>
+<h3 style="margin-top:22px">Top 10 procesos <small style="font-weight:400;color:#aaa">ps aux --sort=-%cpu</small></h3>
+<div class="tscroll"><table><thead><tr><th>PID</th><th>Usuario</th><th>%CPU</th><th>%MEM</th><th>Comando</th></tr></thead><tbody id="procs"></tbody></table></div></section>
+
+<section id="crud" class="panel rv"><h2><span>📚</span>Glosario (CRUD con MariaDB)</h2>
+<div class="grid"><form class="card" id="f"><h3 id="fT">Nuevo concepto</h3><input type="hidden" id="id">
+<select id="mod"><option value="procesos">Procesos</option><option value="memoria">Memoria</option><option value="archivos">Archivos</option><option value="virtualizacion">Virtualización</option></select>
+<input id="tit" maxlength="80" placeholder="Título"><textarea id="des" rows="3" placeholder="Descripción"></textarea>
+<button type="submit">Guardar concepto</button> <button type="button" id="cancel">Cancelar</button></form>
+<div class="card"><h3>Buscar</h3><input id="q" placeholder="Buscar concepto..."><div class="pills" id="flt"></div></div></div>
+<div class="cards" id="list"></div></section>
+<footer>SysOS · Ubuntu Server + Apache2 + PHP + MariaDB</footer><div id="toast"></div><script src="app.js"></script></body></html>
